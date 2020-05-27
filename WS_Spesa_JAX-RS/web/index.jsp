@@ -21,59 +21,65 @@
 
             Proporre l'analisi della gestione di un sistema di condivisione della spesa in cui da una parte c'è la segnalazione di chi, durante un viaggio di ritorno a casa, è disponibile a fare la spesa anche per chi è obbligato a casa e dall'altra chi invece ha bisogno di qualcosa ma non può uscire.
         </h3>
-        
 
-        <p>
-            <br>TOSETTI LUCA
-            <br>@GET
-            <br>http://localhost:8080/spesa/risposte
-            <br>http://localhost:8080/spesa/prodotto?genere={genere}&nome={nome}...
-            <br>@POST 
-            <br>http://localhost:8080/spesa/prodotto
-            <br>@PUT 
-            <br>http://localhost:8080/spesa/prodotto/{idProdotto}
-            <br>@DELETE 
-            <br>http://localhost:8080/spesa/prodotto/{idProdotto}
-        </p>
+        <h1>http://localhost:8080/WS_SPESA/spesa</h1>
 
-        <p>
-            <br>SPANGARO FRANCESCO
-            <br>@GET
-            <br>http://localhost:8080/spesa/richiestaXML/{id}
-            <br>http://localhost:8080/spesa/richiestaJSON/{id}
-            <br>@POST 
-            <br>http://localhost:8080/spesa/utenteXML
-            <br>http://localhost:8080/spesa/utenteJSON
-            <br>http://localhost:8080/spesa/richiestaXML
-            <br>http://localhost:8080/spesa/richiestaJSON
-            <br>@DELETE 
-            <br>http://localhost:8080/spesa/lista?id={rifRichiesta}
-        </p>
 
-        <p>
-            <br>GALIMBERTI FRANCESCO
-            <br>@GET
-            <br>http://localhost:8080/spesa/utenti/utente?id={idUtente}
-            <br>http://localhost:8080/spesa/utenti/utente?username={username}
-            <br>http://localhost:8080/spesa/utenti
-            <br>http://localhost:8080/spesa/utenti?nome={nome}&regione={regione}...
-            <br>@POST 
-            <br>http://localhost:8080/spesa/risposta
-            <br>@PUT
-            <br>http://localhost:8080/spesa/utenti/{idUtente}
-            <br>@DELETE 
-            <br>http://localhost:8080/spesa/richieste/{idRichiesta}/{idUtente}
-        </p>
+        <h1>TOSETTI LUCA</h1>
+        <h4>@GET</h4>
+        <label>
+            /risposte
+            <br>/prodotto?genere={genere}&nome={nome}...
+        </label>
+        <h4>@POST </h4>
+        <label>/prodotto</label>
+        <h4>@PUT </h4>
+        <label>/prodotto/{idProdotto}</label>
+        <h4>@DELETE </h4>
+        <label>/prodotto/{idProdotto}</label>
 
-        <p>
-            <br>ROVELLI ANDREA
-            <br>@GET
-            <br>http://localhost:8080/spesa/lista?rifRichiesta={id}
-            <br>@POST 
-            <br>http://localhost:8080/spesa/lista
-            <br>@PUT 
-            <br>http://localhost:8080/spesa/updLista
-        </p>
+
+        <h1>SPANGARO FRANCESCO</h1>
+        <h4>@GET</h4>
+        <label>
+            /richiestaXML/{id}
+            <br>/richiestaJSON/{id}
+        </label>
+        <h4>@POST</h4> 
+        <label>/utenteXML
+            <br>/utenteJSON
+            <br>/richiestaXML
+            <br>/richiestaJSON
+        </label>
+        <h4>@DELETE </h4>
+        <label>/lista?id={rifRichiesta}</label>
+
+
+        <h1>GALIMBERTI FRANCESCO</h1>
+        <h4>@GET</h4>
+        <label>
+            /utenti/utente?id={idUtente}<br>
+            /utenti/utente?username={username}<br>
+            /utenti<br>
+            /utenti?nome={nome}&regione={regione}...
+        </label>
+        <h4>@POST </h4>
+        <label>/risposta</label>
+        <h4>@PUT</h4>
+        <label>/utenti/{idUtente}</label>
+        <h4>@DELETE </h4>
+        <label>/richieste/{idRichiesta}/{idUtente}</label>
+
+
+
+        <h1>ROVELLI ANDREA</h1>
+        <h4>@GET</h4>
+        <label>/lista?rifRichiesta={id}</label>
+        <h4>@POST </h4>
+        <label>/lista</label>
+        <h4>@PUT </h4>
+        <label>/updLista</label>
+
     </center>
 </body>
 </html>
