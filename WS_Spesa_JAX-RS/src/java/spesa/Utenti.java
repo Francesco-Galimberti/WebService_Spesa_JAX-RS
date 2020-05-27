@@ -64,7 +64,7 @@ import org.xml.sax.SAXException;
  * @author Galimberti Francesco
  */
 @Path("utenti")
-public class Utenti{
+public class Utenti {
 
     final private String driver = "com.mysql.jdbc.Driver";
     final private String dbms_url = "jdbc:mysql://localhost/";
@@ -114,7 +114,6 @@ public class Utenti{
                 .build();
         return r;
     }*/
-
     /**
      * Galimberti Francesco
      *
@@ -139,7 +138,6 @@ public class Utenti{
     @Produces(MediaType.TEXT_XML)
     @Consumes(MediaType.TEXT_PLAIN)
     public Response getUtenti(
-            @QueryParam("username") String username,
             @QueryParam("nome") String nome,
             @QueryParam("cognome") String cognome,
             @QueryParam("regione") String regione) {
@@ -159,26 +157,26 @@ public class Utenti{
             try {
 
                 String sql = "";
-                if (username != null) {
+                /*if (username != null) {
                     sql = "SELECT idUtente, username, nome, cognome, codiceFiscale, regione, via, nCivico FROM utenti WHERE username='" + username + "';";
 
-                } else {
-                    sql = "SELECT idUtente, username, nome, cognome, codiceFiscale, regione, via, nCivico FROM utenti WHERE";
+                } else {*/
+                sql = "SELECT idUtente, username, nome, cognome, codiceFiscale, regione, via, nCivico FROM utenti WHERE";
 
-                    if (nome != null) {
-                        sql += " nome='" + nome + "' AND";
-                    }
-
-                    if (cognome != null) {
-                        sql += " cognome='" + cognome + "' AND";
-                    }
-
-                    if (regione != null) {
-                        sql += " regione='" + regione + "' AND";
-                    }
-
-                    sql = sql + " 1";
+                if (nome != null) {
+                    sql += " nome='" + nome + "' AND";
                 }
+
+                if (cognome != null) {
+                    sql += " cognome='" + cognome + "' AND";
+                }
+
+                if (regione != null) {
+                    sql += " regione='" + regione + "' AND";
+                }
+
+                sql = sql + " 1";
+                //}
 
                 // ricerca nominativo nel database
                 Statement statement = spesaDatabase.createStatement();
@@ -209,24 +207,24 @@ public class Utenti{
                         output += "<utente>";
                         output += "<idUtente>" + u.getIdUtente() + "</idUtente>";
 
-                        if (username != null) {
+                        /*if (username != null) {
                             output += "<nome>" + u.getNome() + "</nome>";
                             output += "<cognome>" + u.getCognome() + "</cognome>";
                             output += "<regione>" + u.getRegione() + "</regione>";
 
-                        } else {
-                            output += "<username>" + u.getUsername() + "</username>";
+                        } else {*/
+                        output += "<username>" + u.getUsername() + "</username>";
 
-                            if (nome == null) {
-                                output += "<nome>" + u.getNome() + "</nome>";
-                            }
-                            if (cognome == null) {
-                                output += "<cognome>" + u.getCognome() + "</cognome>";
-                            }
-                            if (regione == null) {
-                                output += "<regione>" + u.getRegione() + "</regione>";
-                            }
+                        if (nome == null) {
+                            output += "<nome>" + u.getNome() + "</nome>";
                         }
+                        if (cognome == null) {
+                            output += "<cognome>" + u.getCognome() + "</cognome>";
+                        }
+                        if (regione == null) {
+                            output += "<regione>" + u.getRegione() + "</regione>";
+                        }
+                        //}
 
                         output += "<codiceFiscale>" + u.getCodiceFiscale() + "</codiceFiscale>";
                         output += "<via>" + u.getVia() + "</via>";
@@ -254,59 +252,143 @@ public class Utenti{
         }
     }
 
-    /**
-     * Galimberti Francesco
-     *
-     * PUT spesa/utenti/1
-     *
-     * body examples
-     * <utente>
-     * <username>fraGali</username>
-     * <nome>Francesco</nome>
-     * <cognome>Galimberti</cognome>
-     * <codiceFiscale>GLMFNC01A02B729Q</codiceFiscale>
-     * <regione>Lombardia</regione>
-     * <via>Giacomo Leopardi</via>
-     * <nCivico>5</nCivico>
-     * </utente>
-     *
-     * Consente la modifica di un utente andando a specificarne l'ID tramite il
-     * percorso
-     *
-     * @param idUtente identificativo dell'utente da modificare
-     * @param content Body della richiesta PUT http/https contenente i nuovi
-     * valori degli attributi dell'utente specificato nel percorso (sottoforma di
-     * XML)
-     * @return Risposta, con messaggio e stato
-     */
-    @PUT
-    @Path("utente/{idUtente}")
-    @Consumes({MediaType.TEXT_PLAIN, MediaType.TEXT_XML})
-    public Response putUtente(
-            @PathParam("idUtente") int idUtente,
-            String content) {
-        // verifica stato connessione a DBMS
-        init();
-        MyParser myParse;
+    @GET
+    @Produces(MediaType.TEXT_XML)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("utente")
+    public Response getUtente(
+            @QueryParam("id") int id,
+            @QueryParam("username") String username) {
+
+        String output = "";
         Response r;
 
+        // verifica stato connessione a DBMS
         if (!connected) {
-             r = Response.serverError().entity("<messaggio>DBMS Error, impossibile connettersi</messaggio>").build();
+
+            r = Response.serverError().entity("<messaggio>DBMS Error, impossibile connettersi</messaggio>").build();
             return r;
+
         } else {
+            String sql = "SELECT idUtente, username, nome, cognome, codiceFiscale, regione, via, nCivico FROM utenti WHERE ";
+
+            if (username != null && !username.isEmpty()) {
+                sql += "username='" + username + "';";
+            } else if (id > 0) {
+                sql += "idUtente=" + id + ";";
+            } else {
+                destroy();
+                r = Response.status(402).entity("<messaggio>Parametro non valido o mancante</messaggio>").build();
+                return r;
+            }
+
             try {
+                Statement statement = spesaDatabase.createStatement();
+                ResultSet result = statement.executeQuery(sql);
 
-                BufferedWriter file;
-                file = new BufferedWriter(new FileWriter("utente.xml"));
-                file.write(content);
-                file.flush();
-                file.close();
+                result.next();
 
-                myParse = new MyParser();
-                Utente u = myParse.parseFileUtente("utente.xml");
+                String idUtente = result.getString("idUtente");
+                String Username = result.getString("username");
+                String Nome = result.getString("nome");
+                String Cognome = result.getString("cognome");
+                String CodiceFiscale = result.getString("codiceFiscale");
+                String Regione = result.getString("regione");
+                String Via = result.getString("via");
+                String nCivico = result.getString("nCivico");
 
-                if (idUtente != 0) {
-                    /*if (u.getNome() == null || u.getCognome() == null || u.getCognome() == null || u.getCodiceFiscale() == null || u.getRegione() == null || u.getnCivico() == null || u.getVia() == null || u.getUsername() == null) {
+                Utente u = new Utente(idUtente, Username, Nome, Cognome, CodiceFiscale, Regione, Via, nCivico);
+
+                result.close();
+                statement.close();
+
+                output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+                output += "<utente>";
+
+                if (username != null) {
+                    output += "<idUtente>" + u.getIdUtente() + "</idUtente>";
+                } else if (id != 0) {
+                    output += "<username>" + u.getUsername() + "</username>";
+                }
+
+                output += "<nome>" + u.getNome() + "</nome>";
+                output += "<cognome>" + u.getCognome() + "</cognome>";
+                output += "<regione>" + u.getRegione() + "</regione>";
+                output += "<codiceFiscale>" + u.getCodiceFiscale() + "</codiceFiscale>";
+                output += "<via>" + u.getVia() + "</via>";
+                output += "<nCivico>" + u.getnCivico() + "</nCivico>";
+                output += "</utente>";
+
+                destroy();
+                r = Response.ok(output).build();
+                return r;
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+                destroy();
+                r = Response.status(404).entity("<messaggio>Utente non trovato</messaggio>").build();
+                return r;
+            }
+
+        }
+    }
+        /**
+         * Galimberti Francesco
+         *
+         * PUT spesa/utenti/1
+         *
+         * body examples
+         * <utente>
+         * <username>fraGali</username>
+         * <nome>Francesco</nome>
+         * <cognome>Galimberti</cognome>
+         * <codiceFiscale>GLMFNC01A02B729Q</codiceFiscale>
+         * <regione>Lombardia</regione>
+         * <via>Giacomo Leopardi</via>
+         * <nCivico>5</nCivico>
+         * </utente>
+         *
+         * Consente la modifica di un utente andando a specificarne l'ID tramite
+         * il percorso
+         *
+         * @param idUtente identificativo dell'utente da modificare
+         * @param content Body della richiesta PUT http/https contenente i nuovi
+         * valori degli attributi dell'utente specificato nel percorso
+         * (sottoforma di XML)
+         * @return Risposta, con messaggio e stato
+         */
+        @PUT
+        @Path("utente/{idUtente}")
+        @Consumes({MediaType.TEXT_PLAIN, MediaType.TEXT_XML})
+        public Response putUtente
+        (
+            @PathParam("idUtente")
+        int idUtente,
+                String content
+        
+            ) {
+        // verifica stato connessione a DBMS
+        init();
+            MyParser myParse;
+            Response r;
+
+            if (!connected) {
+                r = Response.serverError().entity("<messaggio>DBMS Error, impossibile connettersi</messaggio>").build();
+                return r;
+            } else {
+                try {
+
+                    BufferedWriter file;
+                    file = new BufferedWriter(new FileWriter("utente.xml"));
+                    file.write(content);
+                    file.flush();
+                    file.close();
+
+                    myParse = new MyParser();
+                    Utente u = myParse.parseFileUtente("utente.xml");
+
+                    if (idUtente != 0) {
+                        /*if (u.getNome() == null || u.getCognome() == null || u.getCognome() == null || u.getCodiceFiscale() == null || u.getRegione() == null || u.getnCivico() == null || u.getVia() == null || u.getUsername() == null) {
                         r = Response.status(409).entity("Error, Malformed XML Body").build();
                         return r;
                     }
@@ -315,210 +397,212 @@ public class Utenti{
                         return r;
                     }*/
 
-                    Statement statement = spesaDatabase.createStatement();
+                        Statement statement = spesaDatabase.createStatement();
 
-                    StringBuilder columns = new StringBuilder(255);
-                    if (u.getUsername() != null && !u.getUsername().isEmpty()) {
-                        //sql += " username='" + u.getUsername() + "', ";
-                        columns.append("username='").append(u.getUsername()).append("'");
-                    }
-                    if (u.getNome() != null && !u.getNome().isEmpty()) {
-                        //sql += " nome='" + u.getNome() + "', ";
-                        if (columns.length() > 0) {
-                            columns.append(", ");
+                        StringBuilder columns = new StringBuilder(255);
+                        if (u.getUsername() != null && !u.getUsername().isEmpty()) {
+                            //sql += " username='" + u.getUsername() + "', ";
+                            columns.append("username='").append(u.getUsername()).append("'");
                         }
-                        columns.append("nome='").append(u.getNome()).append("'");
-                    }
-                    if (u.getCognome() != null && !u.getCognome().isEmpty()) {
-                        //sql += " cognome='" + u.getCognome() + "', ";
-                        if (columns.length() > 0) {
-                            columns.append(", ");
+                        if (u.getNome() != null && !u.getNome().isEmpty()) {
+                            //sql += " nome='" + u.getNome() + "', ";
+                            if (columns.length() > 0) {
+                                columns.append(", ");
+                            }
+                            columns.append("nome='").append(u.getNome()).append("'");
                         }
-                        columns.append("cognome='").append(u.getCognome()).append("'");
-                    }
-                    if (u.getCodiceFiscale() != null && !u.getCodiceFiscale().isEmpty()) {
-                        //sql += " codiceFiscale='" + u.getCodiceFiscale() + "', ";
-                        if (columns.length() > 0) {
-                            columns.append(", ");
+                        if (u.getCognome() != null && !u.getCognome().isEmpty()) {
+                            //sql += " cognome='" + u.getCognome() + "', ";
+                            if (columns.length() > 0) {
+                                columns.append(", ");
+                            }
+                            columns.append("cognome='").append(u.getCognome()).append("'");
                         }
-                        columns.append("codiceFiscale='").append(u.getCodiceFiscale()).append("'");
-                    }
-                    if (u.getRegione() != null && !u.getRegione().isEmpty()) {
-                        //sql += " regione='" + u.getRegione() + "', ";
-                        if (columns.length() > 0) {
-                            columns.append(", ");
+                        if (u.getCodiceFiscale() != null && !u.getCodiceFiscale().isEmpty()) {
+                            //sql += " codiceFiscale='" + u.getCodiceFiscale() + "', ";
+                            if (columns.length() > 0) {
+                                columns.append(", ");
+                            }
+                            columns.append("codiceFiscale='").append(u.getCodiceFiscale()).append("'");
                         }
-                        columns.append("regione='").append(u.getRegione()).append("'");
-                    }
-                    if (u.getVia() != null && !u.getVia().isEmpty()) {
-                        //sql += " via='" + u.getVia() + "', ";
-                        if (columns.length() > 0) {
-                            columns.append(", ");
+                        if (u.getRegione() != null && !u.getRegione().isEmpty()) {
+                            //sql += " regione='" + u.getRegione() + "', ";
+                            if (columns.length() > 0) {
+                                columns.append(", ");
+                            }
+                            columns.append("regione='").append(u.getRegione()).append("'");
                         }
-                        columns.append("via='").append(u.getVia()).append("'");
-                    }
-                    if (u.getnCivico() != null && !u.getnCivico().isEmpty()) {
-                        //sql += " nCivico='" + u.getnCivico() + "', ";
-                        if (columns.length() > 0) {
-                            columns.append(", ");
+                        if (u.getVia() != null && !u.getVia().isEmpty()) {
+                            //sql += " via='" + u.getVia() + "', ";
+                            if (columns.length() > 0) {
+                                columns.append(", ");
+                            }
+                            columns.append("via='").append(u.getVia()).append("'");
                         }
-                        columns.append("nCivico='").append(u.getnCivico()).append("'");
-                    }
+                        if (u.getnCivico() != null && !u.getnCivico().isEmpty()) {
+                            //sql += " nCivico='" + u.getnCivico() + "', ";
+                            if (columns.length() > 0) {
+                                columns.append(", ");
+                            }
+                            columns.append("nCivico='").append(u.getnCivico()).append("'");
+                        }
 
-                    if (columns.length() > 0) {
-                        String sql = "UPDATE utenti SET " + columns.toString()
-                                + " WHERE idUtente = " + idUtente + ";";
-                        if (statement.executeUpdate(sql) <= 0) {
+                        if (columns.length() > 0) {
+                            String sql = "UPDATE utenti SET " + columns.toString()
+                                    + " WHERE idUtente = " + idUtente + ";";
+                            if (statement.executeUpdate(sql) <= 0) {
+                                statement.close();
+                                r = Response.serverError().entity("<messaggio>DBMS SQL Error, impossibile modificare utenti</messaggio>").build();
+                                return r;
+                            }
                             statement.close();
-                            r = Response.serverError().entity("<messaggio>DBMS SQL Error, impossibile modificare utenti</messaggio>").build();
+                            destroy();
+                            r = Response.ok("<messaggio>Update avvenuto correttamente</messaggio>").build();
+                            return r;
+
+                        } else {
+                            r = Response.status(404).entity("<messaggio>parametri non validi</messaggio>").build();
                             return r;
                         }
-                        statement.close();
-                        destroy();
-                        r = Response.ok("<messaggio>Update avvenuto correttamente</messaggio>").build();
-                        return r;
-                    
-                    }else{
-                        r = Response.status(404).entity("<messaggio>parametri non validi</messaggio>").build();
+
+                    } else {
+                        r = Response.status(403).entity("<messaggio>idUtente non valido</messaggio>").build();
                         return r;
                     }
 
-                } else {
-                    r = Response.status(403).entity("<messaggio>idUtente non valido</messaggio>").build();
-                    return r;
+                } catch (IOException ex) {
+                    Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+                    destroy();
+                    r = Response.serverError().entity("<messaggio>DBMS IO Error</messaggio>").build();
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+                    destroy();
+                    r = Response.serverError().entity("<messaggio>DBMS SQL Error</messaggio>").build();
+
+                } catch (ParserConfigurationException ex) {
+                    Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+                    destroy();
+                    r = Response.status(409).entity("<messaggio>Error, Malformed XML Body</messaggio>").build();
+
+                } catch (SAXException ex) {
+                    Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+                    destroy();
+                    r = Response.serverError().entity("<messaggio>DBMS SAXE Error</messaggio>").build();
                 }
-
-            } catch (IOException ex) {
-                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
-                destroy();
-                r = Response.serverError().entity("<messaggio>DBMS IO Error</messaggio>").build();
-
-            } catch (SQLException ex) {
-                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
-                destroy();
-                r = Response.serverError().entity("<messaggio>DBMS SQL Error</messaggio>").build();
-
-            } catch (ParserConfigurationException ex) {
-                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
-                destroy();
-                r = Response.status(409).entity("<messaggio>Error, Malformed XML Body</messaggio>").build();
-
-            } catch (SAXException ex) {
-                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
-                destroy();
-                r = Response.serverError().entity("<messaggio>DBMS SAXE Error</messaggio>").build();
+                return r;
             }
-            return r;
         }
-    }
 
-    
-
-    /**
-     * SPANGARO FRANCESCO inserisce i dati di un utente fornito nel body in
-     * formato XML come definito nella progettazione api
-     *
-     * @param content sono i dati inviati dall'utilizzatore, salvato nella
-     * cartella server xampp/tomcat/bin/utente.xml
-     * @return varie tipologie di ritorno, conferma se corretto, altrimenti
-     * messaggi di errore corrispondenti
-     */
-    @POST
-    //@Path("utenteXML")
-    @Consumes(MediaType.TEXT_XML)
-    public String postUtenteXML(String content) {
+        /**
+         * SPANGARO FRANCESCO inserisce i dati di un utente fornito nel body in
+         * formato XML come definito nella progettazione api
+         *
+         * @param content sono i dati inviati dall'utilizzatore, salvato nella
+         * cartella server xampp/tomcat/bin/utente.xml
+         * @return varie tipologie di ritorno, conferma se corretto, altrimenti
+         * messaggi di errore corrispondenti
+         */
+        @POST
+        @Path("utenteXML")
+        @Consumes(MediaType.TEXT_XML)
+        public String postUtenteXML
+        (String content
+        
+            ) {
         init();
-        try {
-            String xsdFile = "\\xml\\utente.xsd";
-            BufferedWriter writer;
-            writer = new BufferedWriter(new FileWriter("utente.xml"));
-            writer.write(content);
-            writer.flush();
-            writer.close();
-            Utente utente = new Utente();
+            try {
+                String xsdFile = "\\xml\\utente.xsd";
+                BufferedWriter writer;
+                writer = new BufferedWriter(new FileWriter("utente.xml"));
+                writer.write(content);
+                writer.flush();
+                writer.close();
+                Utente utente = new Utente();
 
-            /*try {
+                /*try {
                 MyValidator.validate("entry.xml", xsdFile);
             } catch (SAXException ex) {
                 Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
                 return "<errorMessage>400 Malformed XML</errorMessage>";
             }*/
-            MyParser parse = new MyParser();
-            utente = parse.parseUtente("utente.xml");
-            if (!connected) {
-                return "<errorMessage>400</errorMessage>";
-            }
-            String sql = "INSERT INTO utenti(username, nome, cognome, password, codiceFiscale, regione, via, nCivico) VALUES('" + utente.getUsername() + "', '" + utente.getNome() + "', '" + utente.getCognome() + "', '" + utente.getPassword() + "', '" + utente.getCodiceFiscale() + "', '" + utente.getRegione() + "', '" + utente.getVia() + "', '" + utente.getnCivico() + "')";
-            Statement statement = spesaDatabase.createStatement();
+                MyParser parse = new MyParser();
+                utente = parse.parseUtente("utente.xml");
+                if (!connected) {
+                    return "<errorMessage>400</errorMessage>";
+                }
+                String sql = "INSERT INTO utenti(username, nome, cognome, password, codiceFiscale, regione, via, nCivico) VALUES('" + utente.getUsername() + "', '" + utente.getNome() + "', '" + utente.getCognome() + "', '" + utente.getPassword() + "', '" + utente.getCodiceFiscale() + "', '" + utente.getRegione() + "', '" + utente.getVia() + "', '" + utente.getnCivico() + "')";
+                Statement statement = spesaDatabase.createStatement();
 
-            if (statement.executeUpdate(sql) <= 0) {
+                if (statement.executeUpdate(sql) <= 0) {
+                    statement.close();
+                    return "<errorMessage>403</errorMessage>";
+                }
+
                 statement.close();
-                return "<errorMessage>403</errorMessage>";
+                destroy();
+                return "<message>Inserimento avvenuto correttamente</message>";
+
+            } catch (IOException ex) {
+                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SAXException ex) {
+                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            statement.close();
-            destroy();
-            return "<message>Inserimento avvenuto correttamente</message>";
-
-        } catch (IOException ex) {
-            Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+            return "<errorMessage>400</errorMessage>";
         }
-        return "<errorMessage>400</errorMessage>";
-    }
 
-    /**
-     * SPANGARO FRANCESCO inserisce i dati di un utente fornito nel body in
-     * formato JSON come definito nella progettazione api
-     *
-     * @param content sono i dati inviati dall'utilizzatore, parsati dal metodo
-     * (libreria usata: json-20190722.jar)
-     * @return varie tipologie di ritorno, conferma se corretto, altrimenti
-     * messaggi di errore corrispondenti
-     */
-    @POST
-    @Path("utenteJSON")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String postUtenteJSON(String content) {
+        /**
+         * SPANGARO FRANCESCO inserisce i dati di un utente fornito nel body in
+         * formato JSON come definito nella progettazione api
+         *
+         * @param content sono i dati inviati dall'utilizzatore, parsati dal
+         * metodo (libreria usata: json-20190722.jar)
+         * @return varie tipologie di ritorno, conferma se corretto, altrimenti
+         * messaggi di errore corrispondenti
+         */
+        @POST
+        @Path("utenteJSON")
+        @Consumes(MediaType.APPLICATION_JSON)
+        public String postUtenteJSON
+        (String content
+        
+            ) {
         init();
-        try {
-            JSONObject obj = new JSONObject(content);
-            Utente utente = new Utente();
-            utente.setUsername(obj.getJSONObject("utente").getString("username"));
-            utente.setNome(obj.getJSONObject("utente").getString("nome"));
-            utente.setCognome(obj.getJSONObject("utente").getString("cognome"));
-            utente.setPassword(obj.getJSONObject("utente").getString("password"));
-            utente.setCodiceFiscale(obj.getJSONObject("utente").getString("codiceFiscale"));
-            utente.setRegione(obj.getJSONObject("utente").getString("regione"));
-            utente.setVia(obj.getJSONObject("utente").getString("via"));
-            utente.setnCivico(obj.getJSONObject("utente").getString("nCivico"));
+            try {
+                JSONObject obj = new JSONObject(content);
+                Utente utente = new Utente();
+                utente.setUsername(obj.getJSONObject("utente").getString("username"));
+                utente.setNome(obj.getJSONObject("utente").getString("nome"));
+                utente.setCognome(obj.getJSONObject("utente").getString("cognome"));
+                utente.setPassword(obj.getJSONObject("utente").getString("password"));
+                utente.setCodiceFiscale(obj.getJSONObject("utente").getString("codiceFiscale"));
+                utente.setRegione(obj.getJSONObject("utente").getString("regione"));
+                utente.setVia(obj.getJSONObject("utente").getString("via"));
+                utente.setnCivico(obj.getJSONObject("utente").getString("nCivico"));
 
-            if (!connected) {
-                return "<errorMessage>400</errorMessage>";
-            }
-            String sql = "INSERT INTO utenti(username, nome, cognome, password, codiceFiscale, regione, via, nCivico) VALUES('" + utente.getUsername() + "', '" + utente.getNome() + "', '" + utente.getCognome() + "', '" + utente.getPassword() + "', '" + utente.getCodiceFiscale() + "', '" + utente.getRegione() + "', '" + utente.getVia() + "', '" + utente.getnCivico() + "')";
-            Statement statement = spesaDatabase.createStatement();
+                if (!connected) {
+                    return "<errorMessage>400</errorMessage>";
+                }
+                String sql = "INSERT INTO utenti(username, nome, cognome, password, codiceFiscale, regione, via, nCivico) VALUES('" + utente.getUsername() + "', '" + utente.getNome() + "', '" + utente.getCognome() + "', '" + utente.getPassword() + "', '" + utente.getCodiceFiscale() + "', '" + utente.getRegione() + "', '" + utente.getVia() + "', '" + utente.getnCivico() + "')";
+                Statement statement = spesaDatabase.createStatement();
 
-            if (statement.executeUpdate(sql) <= 0) {
+                if (statement.executeUpdate(sql) <= 0) {
+                    statement.close();
+                    return "<errorMessage>403</errorMessage>";
+                }
+
                 statement.close();
-                return "<errorMessage>403</errorMessage>";
+                destroy();
+                return "<message>Inserimento avvenuto correttamente</message>";
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            statement.close();
-            destroy();
-            return "<message>Inserimento avvenuto correttamente</message>";
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Utenti.class.getName()).log(Level.SEVERE, null, ex);
+            return "<errorMessage>400</errorMessage>";
         }
-        return "<errorMessage>400</errorMessage>";
+
     }
-
-    
-
-}
