@@ -35,6 +35,7 @@ public class ApplicationConfig extends Application {
         resources.add(spesa.Liste.class);
         resources.add(spesa.Prodotti.class);
         resources.add(spesa.Richieste.class);
+        resources.add(spesa.Risposte.class);
         resources.add(spesa.Utenti.class);
     }
     
