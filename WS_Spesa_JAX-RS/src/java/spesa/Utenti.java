@@ -1,44 +1,4 @@
-/**
- * TOSETTI LUCA
- *
- * @GET
- * http://localhost:8080/spesa/risposte
- * http://localhost:8080/spesa/prodotto?genere={genere}&nome={nome}...
- * @POST http://localhost:8080/spesa/prodotto
- * @PUT http://localhost:8080/spesa/prodotto/{idProdotto}
- * @DELETE http://localhost:8080/spesa/prodotto/{idProdotto}
- */
-/**
- * SPANGARO FRANCESCO
- *
- * @GET
- * http://localhost:8080/spesa/richiestaXML/{id}
- * http://localhost:8080/spesa/richiestaJSON/{id}
- * @POST http://localhost:8080/spesa/utenteXML
- * http://localhost:8080/spesa/utenteJSON
- * http://localhost:8080/spesa/richiestaXML
- * http://localhost:8080/spesa/richiestaJSON
- * @DELETE http://localhost:8080/spesa/lista?id={rifRichiesta}
- */
-/**
- * GALIMBERTI FRANCESCO
- *
- * @GET
- * http://localhost:8080/spesa/utenti
- * http://localhost:8080/spesa/utenti?username={username}&nome={nome}...
- * @POST http://localhost:8080/spesa/risposta
- * @PUT http://localhost:8080/spesa/utenti/{idUtente}
- * @DELETE http://localhost:8080/spesa/richieste/{idRichiesta}/{idUtente}
- */
-/**
- * ROVELLI ANDREA
- *
- * @GET
- * http://localhost:8080/spesa/lista?rifRichiesta={id}
- * @POST http://localhost:8080/spesa/lista
- *
- * @PUT http://localhost:8080/spesa/updLista
- */
+
 package spesa;
 
 import java.io.BufferedWriter;
@@ -114,6 +74,7 @@ public class Utenti {
                 .build();
         return r;
     }*/
+    
     /**
      * Galimberti Francesco
      *
@@ -123,9 +84,6 @@ public class Utenti {
      * permettendo di filtrare i risultati ottenuti attraverso vari parametri di
      * query.
      *
-     * @param username Parametro query che permette di specificare l'username
-     * dell'utente che si vuole visualizzare, con esso gli altri filtri non sono
-     * usati
      * @param nome Parametro query che permette di specificare il nome dei
      * utenti che si vogliono visualizzare
      * @param cognome Parametro query che permette di specificare il cognome dei
@@ -206,13 +164,6 @@ public class Utenti {
                         Utente u = utentiList.get(i);
                         output += "<utente>";
                         output += "<idUtente>" + u.getIdUtente() + "</idUtente>";
-
-                        /*if (username != null) {
-                            output += "<nome>" + u.getNome() + "</nome>";
-                            output += "<cognome>" + u.getCognome() + "</cognome>";
-                            output += "<regione>" + u.getRegione() + "</regione>";
-
-                        } else {*/
                         output += "<username>" + u.getUsername() + "</username>";
 
                         if (nome == null) {
@@ -224,7 +175,6 @@ public class Utenti {
                         if (regione == null) {
                             output += "<regione>" + u.getRegione() + "</regione>";
                         }
-                        //}
 
                         output += "<codiceFiscale>" + u.getCodiceFiscale() + "</codiceFiscale>";
                         output += "<via>" + u.getVia() + "</via>";
@@ -252,6 +202,22 @@ public class Utenti {
         }
     }
 
+    /**
+     * Galimberti Francesco
+     *
+     * http://localhost:8080/spesa/utenti/utente?id={idUtente}
+     * http://localhost:8080/spesa/utenti/utente?username={username}
+     * 
+     * Visualizza i dati relativi agli utenti memorizzati nel database
+     * permettendo di filtrare i risultati ottenuti attraverso vari parametri di
+     * query.
+     *
+     * @param id Parametro query che permette di specificare l'id dell'utente
+     * che si vuole visualizzare
+     * @param username Parametro query che permette di specificare l'username dell'utente
+     * che si vuole visualizzare
+     * @return Risposta, con informazioni richieste o messaggio di errore
+     */
     @GET
     @Produces(MediaType.TEXT_XML)
     @Consumes(MediaType.TEXT_PLAIN)

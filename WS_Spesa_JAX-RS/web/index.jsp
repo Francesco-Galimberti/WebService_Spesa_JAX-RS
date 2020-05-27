@@ -21,6 +21,59 @@
 
             Proporre l'analisi della gestione di un sistema di condivisione della spesa in cui da una parte c'è la segnalazione di chi, durante un viaggio di ritorno a casa, è disponibile a fare la spesa anche per chi è obbligato a casa e dall'altra chi invece ha bisogno di qualcosa ma non può uscire.
         </h3>
+        
+
+        <p>
+            <br>TOSETTI LUCA
+            <br>@GET
+            <br>http://localhost:8080/spesa/risposte
+            <br>http://localhost:8080/spesa/prodotto?genere={genere}&nome={nome}...
+            <br>@POST 
+            <br>http://localhost:8080/spesa/prodotto
+            <br>@PUT 
+            <br>http://localhost:8080/spesa/prodotto/{idProdotto}
+            <br>@DELETE 
+            <br>http://localhost:8080/spesa/prodotto/{idProdotto}
+        </p>
+
+        <p>
+            <br>SPANGARO FRANCESCO
+            <br>@GET
+            <br>http://localhost:8080/spesa/richiestaXML/{id}
+            <br>http://localhost:8080/spesa/richiestaJSON/{id}
+            <br>@POST 
+            <br>http://localhost:8080/spesa/utenteXML
+            <br>http://localhost:8080/spesa/utenteJSON
+            <br>http://localhost:8080/spesa/richiestaXML
+            <br>http://localhost:8080/spesa/richiestaJSON
+            <br>@DELETE 
+            <br>http://localhost:8080/spesa/lista?id={rifRichiesta}
+        </p>
+
+        <p>
+            <br>GALIMBERTI FRANCESCO
+            <br>@GET
+            <br>http://localhost:8080/spesa/utenti/utente?id={idUtente}
+            <br>http://localhost:8080/spesa/utenti/utente?username={username}
+            <br>http://localhost:8080/spesa/utenti
+            <br>http://localhost:8080/spesa/utenti?nome={nome}&regione={regione}...
+            <br>@POST 
+            <br>http://localhost:8080/spesa/risposta
+            <br>@PUT
+            <br>http://localhost:8080/spesa/utenti/{idUtente}
+            <br>@DELETE 
+            <br>http://localhost:8080/spesa/richieste/{idRichiesta}/{idUtente}
+        </p>
+
+        <p>
+            <br>ROVELLI ANDREA
+            <br>@GET
+            <br>http://localhost:8080/spesa/lista?rifRichiesta={id}
+            <br>@POST 
+            <br>http://localhost:8080/spesa/lista
+            <br>@PUT 
+            <br>http://localhost:8080/spesa/updLista
+        </p>
     </center>
 </body>
 </html>
