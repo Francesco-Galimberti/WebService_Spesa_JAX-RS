@@ -5,6 +5,9 @@
  */
 package spesa;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Set;
 import javax.ws.rs.core.Application;
 
@@ -12,9 +15,9 @@ import javax.ws.rs.core.Application;
  *
  * @author Galimberti Francesco
  */
-@javax.ws.rs.ApplicationPath("")
+@javax.ws.rs.ApplicationPath("spesa")
 public class ApplicationConfig extends Application {
-
+    
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
@@ -29,6 +32,10 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(spesa.Liste.class);
+        resources.add(spesa.Prodotti.class);
+        resources.add(spesa.Richieste.class);
+        resources.add(spesa.Utenti.class);
     }
     
 }

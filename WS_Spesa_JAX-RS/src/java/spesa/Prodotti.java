@@ -63,9 +63,8 @@ import org.xml.sax.SAXException;
  *
  * @author Galimberti Francesco
  */
-@ApplicationPath("")
-@Path("")
-public class Api extends Application {
+@Path("prodotti")
+public class Prodotti{
 
     final private String driver = "com.mysql.jdbc.Driver";
     final private String dbms_url = "jdbc:mysql://localhost/";
@@ -103,18 +102,11 @@ public class Api extends Application {
     /**
      * Creates a new instance of Api
      */
-    public Api() {
-        super();
+    public Prodotti() {
+        init();
     }
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("prova")
-    public Response getMessage() {
-        Response r = Response.ok("test with GET")
-                .build();
-        return r;
-    }
+    
 
     /**
      * Galimberti Francesco
@@ -391,22 +383,22 @@ public class Api extends Application {
                 }
 
             } catch (IOException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 r = Response.serverError().entity("<messaggio>DBMS IO Error</messaggio>").build();
 
             } catch (SQLException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 r = Response.serverError().entity("<messaggio>DBMS SQL Error</messaggio>").build();
 
             } catch (ParserConfigurationException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 r = Response.status(409).entity("<messaggio>Error, Malformed XML Body</messaggio>").build();
 
             } catch (SAXException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 r = Response.serverError().entity("<messaggio>DBMS SAXE Error</messaggio>").build();
             }
@@ -533,22 +525,22 @@ public class Api extends Application {
                 return r;
 
             } catch (IOException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 r = Response.serverError().entity("<messaggio>DBMS IO Error</messaggio>").build();
 
             } catch (SQLException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 r = Response.serverError().entity("<messaggio>DBMS SQL Error</messaggio>").build();
 
             } catch (ParserConfigurationException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 r = Response.status(409).entity("<messaggio>Error, Malformed XML Body</messaggio>").build();
 
             } catch (SAXException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 r = Response.serverError().entity("<messaggio>DBMS SAXE Error</messaggio>").build();
             }
@@ -777,11 +769,11 @@ public class Api extends Application {
                 return "<errorMessage>500</errorMessage>";
             }
         } catch (IOException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "<errorMessage>400</errorMessage>";
     }
@@ -839,11 +831,11 @@ public class Api extends Application {
                 return "<errorMessage>500</errorMessage>";
             }
         } catch (IOException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "<errorMessage>400</errorMessage>";
     }
@@ -935,7 +927,7 @@ public class Api extends Application {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 return "<errorMessage>500</errorMessage>";
             }
@@ -990,7 +982,7 @@ public class Api extends Application {
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
                 destroy();
                 return "<errorMessage>500</errorMessage>";
             }
@@ -1046,13 +1038,13 @@ public class Api extends Application {
             return "<message>Inserimento avvenuto correttamente</message>";
 
         } catch (IOException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "<errorMessage>400</errorMessage>";
     }
@@ -1099,7 +1091,7 @@ public class Api extends Application {
             return "<message>Inserimento avvenuto correttamente</message>";
 
         } catch (SQLException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "<errorMessage>400</errorMessage>";
     }
@@ -1151,13 +1143,13 @@ public class Api extends Application {
             return "<message>Inserimento avvenuto correttamente</message>";
 
         } catch (IOException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "<errorMessage>400</errorMessage>";
     }
@@ -1200,270 +1192,11 @@ public class Api extends Application {
             return "<message>Inserimento avvenuto correttamente</message>";
 
         } catch (SQLException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Prodotti.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "<errorMessage>400</errorMessage>";
     }
 
-    /**
-     * SPANGARO FRANCESCO cancella una lista dal database, una lista è l'insieme
-     * dei prodotti, assegnata poi ad una richiesta, lista che corrisponde
-     * all'id inserito come parametro della query, riferimento alla richiesta
-     * corrispondente
-     *
-     * @param id è l'id su cui si deve basare per fare la ricerca
-     * @return varie tipologie di ritorno, conferma se corretto, altrimenti
-     * messaggi di errore corrispondenti
-     */
-    @DELETE
-    @Path("lista")
-    public String deleteLista(@QueryParam("id") int rifRichiesta) {
-        init();
-
-        if (!connected) {
-            return "<errorMessage>400</errorMessage>";
-        }
-        try {
-            String sql = "DELETE FROM liste WHERE rifRichiesta='" + rifRichiesta + "'";
-            Statement statement = spesaDatabase.createStatement();
-
-            if (statement.executeUpdate(sql) <= 0) {
-                statement.close();
-                return "<errorMessage>403</errorMessage>";
-            }
-
-            statement.close();
-            destroy();
-            return "<message>Eliminazione avvenuta correttamente</message>";
-        } catch (SQLException ex) {
-            destroy();
-            return "<errorMessage>500</errorMessage>";
-        }
-    }
-
-    /**
-     * SPANGARO FRANCESCO Metodo per il casting delle stringhe restituite dal
-     * database, da String a Time
-     */
-    public java.sql.Time getTime(String stringa) {
-        DateFormat formato = new SimpleDateFormat("HH:mm:ss");
-        java.sql.Time ora = null;
-        try {
-            ora = new java.sql.Time(formato.parse(stringa).getTime());
-        } catch (ParseException ex) {
-            Logger.getLogger(MyParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return ora;
-    }
-
-    /**
-     * @author Rovelli Andrea
-     *
-     * GET spesa/lista
-     *
-     * Consente di ottenere la lista della spesa di un determinato utente
-     *
-     * @param id Parametro che identifica la lista di un determinato utente
-     *
-     * @return Risposta, con messaggio e stato
-     */
-    @GET
-    @Produces(MediaType.TEXT_XML)
-    @Path("lista")
-    public String getLista(@QueryParam("rifRichiesta") String id) {
-
-        init();
-        String output = "";
-        if (!connected) {
-            return "<errorMessage>400</errorMessage>";
-        }
-
-        try {
-            String sql = "SELECT Costo,Nome,Marca FROM prodotti p, liste l WHERE p.idProdotto = l.rifProdotto AND ";
-            if (!id.isEmpty()) {
-                sql = sql + " l.rifRichiesta='" + id + "'";
-            }
-
-            Statement statement = spesaDatabase.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-
-            ArrayList<Prodotto> spesa = new ArrayList(0);
-
-            while (result.next()) {
-
-                double costo = result.getDouble("costo");
-                String marca = result.getString("marca");
-                String nome = result.getString("nome");
-
-                Prodotto prodotto = new Prodotto(costo, marca, nome);
-
-                spesa.add(prodotto);
-            }
-            result.close();
-            statement.close();
-
-            output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-            output += "<listaSpesa>\n";
-
-            if (!spesa.isEmpty()) {
-
-                for (int i = 0; i < spesa.size(); i++) {
-                    Prodotto p = spesa.get(i);
-
-                    output += "<prodotto>\n";
-                    output += "<costo>";
-                    output += p.getCosto();
-                    output += "</costo>\n";
-                    output += "<nome>";
-                    output += p.getNome();
-                    output += "</nome>\n";
-                    output += "<marca>";
-                    output += p.getMarca();
-                    output += "</marca>\n";
-                    output += "</prodotto>\n";
-                }
-
-                output += "</listaSpesa>\n";
-            } else {
-
-                destroy();
-                return "<errorMessage>404</errorMessage>";
-
-            }
-
-        } catch (SQLException ex) {
-            destroy();
-            return "<errorMessage>500</errorMessage>";
-        }
-        destroy();
-        return output;
-    }
-
-    /**
-     * @author Rovelli Andrea
-     *
-     * POST spesa/lista
-     *
-     * Consente di inserire nella lista della spesa un nuovo prodotto
-     *
-     * @param content Body contenente tutti i valori necessari all'esecuzione
-     * della POST come il riferimento alla richiesta, al prodotto e la quantità
-     * da comprare
-     *
-     * @return Risposta, con messaggio e stato
-     */
-    @POST
-    @Consumes(MediaType.TEXT_XML)
-    @Path("lista")
-    public String postLista(String content) {
-        try {
-            init();
-
-            MyParser myParse = new MyParser();
-            BufferedWriter writer;
-            writer = new BufferedWriter(new FileWriter("lista.xml"));
-            writer.write(content);
-            writer.flush();
-            writer.close();
-
-            ArrayList<Lista> liste = (ArrayList<Lista>) myParse.parseDocument("lista.xml", "post");
-            if (!connected) {
-                return "<errorMessage>400</errorMessage>";
-            }
-
-            try {
-                String sql = "INSERT INTO liste (rifRichiesta, rifProdotto, quantita) VALUES ('" + liste.get(0).getRifRichiesta() + "','" + liste.get(0).getRifProdotto() + "','" + liste.get(0).getQuantita() + "')";
-                Statement statement = spesaDatabase.createStatement();
-
-                if (statement.executeUpdate(sql) <= 0) {
-                    statement.close();
-                    return "<errorMessage>403</errorMessage>";
-                }
-
-                statement.close();
-                destroy();
-                return "<message>Inserimento effettuato</message>";
-            } catch (SQLException ex) {
-                destroy();
-                return "<errorMessage>500</errorMessage>";
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "<errorMessage>400</errorMessage>";
-    }
-
-    /**
-     * @author Rovelli Andrea
-     *
-     * PUT spesa/lista
-     *
-     * Consente di aggiornare un prodotto all'interno di una lista della spesa
-     *
-     * @param content Body contenente tutti i valori necessari all'esecuzione
-     * della PUT come l'identificativo di un prodotto all'interno di una lista,
-     * il riferimento alla richiesta, al prodotto e la quantità da comprare
-     *
-     * @return Risposta, con messaggio e stato
-     *
-     * esempio:
-     *
-     * <liste>
-     * <lista>
-     * <idLista>7</idLista>
-     * <rifRichiesta>2</rifRichiesta>
-     * <rifProdotto>1</rifProdotto>
-     * <quantita>5</quantita>
-     * </lista>
-     * </liste>
-     */
-    @PUT
-    @Consumes(MediaType.TEXT_XML)
-    @Path("lista")
-    public String putLista(String content) {
-        try {
-            init();
-
-            MyParser myParse = new MyParser();
-            BufferedWriter writer;
-            writer = new BufferedWriter(new FileWriter("updLista.xml"));
-            writer.write(content);
-            writer.flush();
-            writer.close();
-
-            ArrayList<Lista> lista = (ArrayList<Lista>) myParse.parseDocument("updLista.xml", "put");
-            if (!connected) {
-                return "<errorMessage>400</errorMessage>";
-            }
-
-            try {
-                String sql = "UPDATE liste SET rifRichiesta='" + lista.get(0).getRifRichiesta() + "', rifProdotto='" + lista.get(0).getRifProdotto() + "', quantita='" + lista.get(0).getQuantita() + "' WHERE idLista='" + lista.get(0).getIdLista() + "'";
-                Statement statement = spesaDatabase.createStatement();
-
-                if (statement.executeUpdate(sql) <= 0) {
-                    statement.close();
-                    return "<errorMessage>403</errorMessage>";
-                }
-
-                statement.close();
-                destroy();
-                return "<message>Update effettuato</message>";
-            } catch (SQLException ex) {
-                destroy();
-                return "<errorMessage>500</errorMessage>";
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "<errorMessage>400</errorMessage>";
-    }
+    
 
 }
